@@ -1,0 +1,15 @@
+{
+    "name": "ikwattro/meetup2neo",
+    "description": "Simple meetup event to neo4j import",
+    "require": {
+        "neoxygen/neoclient": "~2.1",
+        "dms/meetup-api-client": "~1.3"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christophe Willemsen",
+            "email": "willemsen.christophe@gmail.com"
+        }
+    ]
+}

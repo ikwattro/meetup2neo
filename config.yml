@@ -1,0 +1,6 @@
+neo4j_scheme: http
+neo4j_host: localhost
+neo4j_port: 7474
+neo4j_user: neo4j
+neo4j_password: neo4j
+meetup_api_key: secret
