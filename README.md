@@ -13,6 +13,10 @@ It will import :
 
 ![Imgur](http://i.imgur.com/iwzfxAg.png)
 
+After the import it will generate a `meetup.html` file showing the user's topics interests 
+
+![Imgur](http://i.imgur.com/EfbNEuJ.png)
+
 ### How to use
 
 Clone this repo
