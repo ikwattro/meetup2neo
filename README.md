@@ -21,6 +21,13 @@ Clone this repo
 git clone git@github.com:ikwattro/meetup2neo
 ```
 
+Install composer (php dependency manager) if you don't have it
+
+```bash
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
+```
+
 Install the dependencies
  
 ```bash
