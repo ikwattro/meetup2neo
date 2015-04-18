@@ -33,7 +33,7 @@ $neoClient = ClientBuilder::create()
     )
     ->setAutoFormatResponse(true)
     ->build();
-/**
+
 // Creating Schema Indexes And Constraints
 if (!$skipSchemaSetup) {
     $neoClient->createUniqueConstraint('Event', 'id');
@@ -209,7 +209,6 @@ $neoClient->sendCypherQuery($query, $p);
 
 
 // Building meetup.html d3 demo
- */
 
 $template = '
 <!DOCTYPE html>
@@ -242,7 +241,7 @@ $query = 'MATCH (event:Event {id: {event_id}})
 MATCH (event)<-[:PARTICIPATE]-(m)
 MATCH (m)-[:MEMBER_OF]->(group)<-[:TAGS_GROUP]-(t:Topic)
 WITH t.name as topics, count(*) as c
-WHERE c > 10
+WHERE c > 5
 RETURN topics, c';
 $p = ['event_id' => $eventId];
 $result = $neoClient->sendCypherQuery($query, $p)->getResult();
