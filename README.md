@@ -28,6 +28,8 @@ curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 ```
 
+If you have file permissions problems with the `mv` command, try with `sudo`
+
 Install the dependencies
  
 ```bash
