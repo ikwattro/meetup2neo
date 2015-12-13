@@ -41,6 +41,7 @@ if (!$skipSchemaSetup) {
     $neoClient->createUniqueConstraint('Topic', 'id');
     $neoClient->createUniqueConstraint('Country', 'code');
     $neoClient->createIndex('City', 'name');
+    echo 'Schema created' . "\n";
 } else {
     echo 'Skipping Schema Creation' . "\n";
 }
@@ -68,7 +69,7 @@ $p = [
     'event_url' => $eventUrl
 ];
 $neoClient->sendCypherQuery($query, $p);
-
+echo 'Events inserted' . "\n";
 
 // Get Meetup Group Informations
 $groups = $meetupClient->getGroups(array('group_urlname' => $groupUrl));
@@ -108,6 +109,8 @@ $p = [
 ];
 $neoClient->sendCypherQuery($query, $p);
 
+echo 'Meetup group information inserted' . "\n";
+
 // Inserting Meetup Group's Organiser
 
 $query = 'MATCH (group:Group {id: {group_id}})
@@ -120,6 +123,8 @@ $p = [
     'group_id' => $groupId
 ];
 $neoClient->sendCypherQuery($query, $p);
+
+echo 'Group organisers inserted' . "\n";
 
 // Get Group's Members
 $groupMembers = [];
@@ -135,22 +140,24 @@ foreach ($members as $member) {
         'avatar' => isset($member['photo']['thumb_link']) ?: null
     ];
     $groupMembers[$m['id']] = $m;
+    echo '.';
 }
 
 // Get Member's Groups
 
+echo "\n" . 'Fetching groups for members';
 foreach ($members as $member) {
     $mgroups = $meetupClient->getGroups(array('member_id' => $member['id']));
     foreach ($mgroups as $g) {
         $groupMembers[$member['id']]['groups'][] = $g;
     }
+    echo '.';
     usleep(50000);
 }
 
 // Inserting Group's Members and Groups they belong to
 foreach ($members as $member) {
     //Inserting the member
-    echo 'Inserting Member "' . $member['name'] . '"' . "\n";
     $query = 'MERGE (m:Member {id: {member}.id })
     SET m.name = {member}.name, m.avatar = {member}.avatar, m.joined_time = {member}.joined_time
     MERGE (city:City {name: {member}.city})
@@ -165,8 +172,10 @@ foreach ($members as $member) {
     UNWIND {groups} as group
     MERGE (g:Group {id: group.id})
     SET g.name = group.name, g.description = group.description
-    MERGE (o:Member {id: group.organizer.member_id})
-    ON CREATE SET o.name = group.organizer.name
+     FOREACH (x in CASE WHEN group.organizer.member_id IS NULL THEN [] ELSE [group.organizer.member_id] END |
+        MERGE (o:Member {id: group.organizer.member_id})
+        ON CREATE SET o.name = group.organizer.name
+        MERGE (o)-[:ORGANISE_GROUP]->(g))
     MERGE (city:City {name: group.city})
     MERGE (cty:Country {code: upper(group.country)})
     MERGE (g)-[:GROUP_IN_CITY]->(city)
@@ -183,6 +192,7 @@ foreach ($members as $member) {
 
 // GetRsvps
 
+echo 'Fetching RSVPs' . "\n";
 $response = $meetupClient->getRSVPs(array('event_id' => $eventId));
 $rsvps = [];
 foreach ($response as $responseItem) {
