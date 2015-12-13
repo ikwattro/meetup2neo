@@ -11,6 +11,8 @@ It will import :
 * All topics that tags groups
 * The RSVPs for the Event
 
+![Imgur](http://i.imgur.com/G01xgHd.png)
+
 ![Imgur](http://i.imgur.com/iwzfxAg.png)
 
 After the import it will generate a `meetup.html` file showing the user's topics interests 
